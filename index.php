@@ -5,7 +5,7 @@ $savedPets  = [];
 $savedOwner = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once __DIR__ . '/klaviyo.php';
+    require_once __DIR__ . '/twenty.php';
 
     $owner = [
         'nome'       => trim($_POST['nome']        ?? ''),
@@ -72,11 +72,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$hasError) {
-        $result = sendToKlaviyo($owner, $pets);
+        $result = sendToTwenty($owner, $pets);
         if ($result['success']) {
             $success = true;
         } else {
-            $error = 'Ocorreu um erro ao enviar os dados. Por favor, tente novamente. ' . ($result['message'] ?? '');
+            $detailMessage = $result['message'] ?? '';
+            if (!empty($result['details'])) {
+                if (is_array($result['details'])) {
+                    $errorDetails = [];
+                    foreach ($result['details'] as $key => $value) {
+                        if ($key !== 'message' && $key !== 'success') {
+                            if (is_array($value)) {
+                                $errorDetails[] = "{$key}: " . json_encode($value);
+                            } else {
+                                $errorDetails[] = "{$key}: {$value}";
+                            }
+                        }
+                    }
+                    if (!empty($errorDetails)) {
+                        $detailMessage .= ' [' . implode(' | ', $errorDetails) . ']';
+                    }
+                } else {
+                    $detailMessage .= ' ' . $result['details'];
+                }
+            }
+            $error = 'Ocorreu um erro ao enviar os dados. Por favor, tente novamente. ' . $detailMessage;
         }
     }
 }
@@ -94,6 +114,7 @@ $savedPetsJson = json_encode($savedPets, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="public/style.css">
+    <link rel="icon" type="image/png" href="//petvi.com.br/cdn/shop/files/Frame_48096321.png?crop=center&height=32&v=1761858834&width=32">
 </head>
 <body>
 
