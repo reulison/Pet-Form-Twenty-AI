@@ -122,9 +122,9 @@ $savedPetsJson = json_encode($savedPets, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX
 <section class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <div class="badge-pill">🐾 Saúde articular para o seu melhor amigo</div>
+        <div class="badge-pill">Cenário do Teste</div>
         <h1>Condropure</h1>
-        <p class="hero-subtitle">Descubra as <strong>6 razões</strong> pelas quais Condropure é o suplemento número 1 para a saúde das articulações do seu pet</p>
+        <p class="hero-subtitle">Você acabou de fazer a Assinatura do Kit 2 Condropure. E seguiu para o próximo passo.</p>
         <a href="#cadastro" class="btn-hero">Cadastrar Meu Pet</a>
     </div>
 </section>
